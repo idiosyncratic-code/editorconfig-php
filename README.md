@@ -1,2 +1,2 @@
 # EditorConfig PHP
-PHP implementation of the EditorConfig core
+PHP implementation of [EditorConfig](https://editorconfig.org)
