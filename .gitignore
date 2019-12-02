@@ -1,0 +1,6 @@
+.phpcs-cache
+.phpunit.result.cache
+phpunit.xml
+/bin/
+/build/
+/vendor/
