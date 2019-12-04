@@ -45,6 +45,13 @@ final class EditorConfig
         return $configuration;
     }
 
+    public function printConfigForPath(string $path) : string
+    {
+        $config = $this->getConfigForPath($path);
+
+        return implode("\n", $config);
+    }
+
     /**
      * @return array<EditorConfigFile>
      */
