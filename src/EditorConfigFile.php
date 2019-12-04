@@ -31,8 +31,13 @@ final class EditorConfigFile
     /** @var array<int, Section> */
     private $sections = [];
 
+    /** @var declarationRegistry */
+    private $declarationRegistry;
+
     public function __construct(string $path)
     {
+        $this->declarationRegistry = new DeclarationRegistry();
+
         if (is_file($path) === false) {
             throw new RuntimeException(sprintf('File %s does not exist', $path));
         }
@@ -66,7 +71,7 @@ final class EditorConfigFile
                 continue;
             }
 
-            $configuration = array_merge($configuration, $section->getProperties());
+            $configuration = array_merge($configuration, $section->getDeclarations());
         }
 
         return $configuration;
@@ -96,14 +101,18 @@ final class EditorConfigFile
 
         $this->isRoot = $parsedContent['root'] ?? false;
 
-        foreach ($parsedContent as $glob => $properties) {
-            if (is_array($properties) === false) {
+        foreach ($parsedContent as $glob => $declarations) {
+            if (is_array($declarations) === false) {
                 continue;
             }
 
             $globPrefix = strpos($glob, '/') === 0 ? dirname($this->path) : '**/';
 
-            $this->sections[] = new Section(sprintf('%s%s', $globPrefix, $glob), $properties);
+            $this->sections[] = new Section(
+                sprintf('%s%s', $globPrefix, $glob),
+                $declarations,
+                $this->declarationRegistry
+            );
         }
     }
 }

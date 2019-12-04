@@ -16,24 +16,26 @@ final class Section
     private $glob;
 
     /** @var array<string, mixed> */
-    private $properties = [];
+    private $declarations = [];
 
     /**
-     * @param array<string, mixed> $properties
+     * @param array<string, mixed> $declarations
      */
-    public function __construct(string $glob, array $properties)
+    public function __construct(string $glob, array $declarations, DeclarationRegistry $declarationRegistry)
     {
         $this->glob = $glob;
 
-        $this->setProperties($properties);
+        $this->declarationRegistry = $declarationRegistry;
+
+        $this->setDeclarations($declarations);
     }
 
     /**
      * @return array<string, mixed>
      */
-    public function getProperties() : array
+    public function getDeclarations() : array
     {
-        return $this->properties;
+        return $this->declarations;
     }
 
     public function matches(string $path) : bool
@@ -41,23 +43,21 @@ final class Section
         return fnmatch($this->glob, $path);
     }
 
-    private function setProperties(array $properties) : void
+    private function setDeclarations(array $declarations) : void
     {
-        foreach ($properties as $name => $value) {
-            $this->setProperty($name, $value);
+        foreach ($declarations as $name => $value) {
+            $this->setDeclaration($name, $value);
         }
     }
 
     /**
      * @param mixed $value
      */
-    private function setProperty(string $name, $value) : void
+    private function setDeclaration(string $name, $value) : void
     {
-        if ($value === 'unset') {
-            $value = null;
-        }
+        $declaration = $this->declarationRegistry->getDeclaration($name, $value);
 
-        $this->properties[strtolower($name)] = $value;
+        $this->declarations[$declaration->getName()] = $declaration;
     }
 
     /**
@@ -65,8 +65,8 @@ final class Section
      */
     public function __get(string $property)
     {
-        if (isset($this->properties[$property]) === true) {
-            return $this->properties[$property];
+        if (isset($this->declarations[$property]) === true) {
+            return $this->declarations[$property];
         }
 
         $trace = debug_backtrace();

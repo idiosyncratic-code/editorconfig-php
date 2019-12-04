@@ -36,12 +36,10 @@ final class EditorConfig
             $configFile = array_pop($configFiles);
         }
 
-        foreach ($configuration as $property => $value) {
-            if ($value !== null) {
-                continue;
+        foreach ($configuration as $key => $declaration) {
+            if ($declaration->getValue() === null) {
+                unset($configuration[$key]);
             }
-
-            unset($configuration[$property]);
         }
 
         return $configuration;
