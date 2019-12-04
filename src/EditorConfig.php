@@ -15,12 +15,15 @@ use function sprintf;
 
 final class EditorConfig
 {
+    /** @var array<string, EditorConfigFile> */
+    private $configFiles = [];
+
     /**
      * @return array<string, mixed>
      */
-    public static function getConfigForPath(string $path) : array
+    public function getConfigForPath(string $path) : array
     {
-        $configFiles = self::locateConfigFiles($path);
+        $configFiles = $this->locateConfigFiles($path);
 
         $root = false;
 
@@ -47,32 +50,39 @@ final class EditorConfig
     /**
      * @return array<EditorConfigFile>
      */
-    private static function locateConfigFiles(string $path) : array
+    private function locateConfigFiles(string $path) : array
     {
         $files = [];
 
         $stop = false;
 
-        while ($stop !== true) {
-            $editorConfig = realpath(sprintf('%s%s.editorconfig', $path, DIRECTORY_SEPARATOR));
+        while (true) {
+            $editorConfigFile = realpath(sprintf('%s%s.editorconfig', $path, DIRECTORY_SEPARATOR));
 
-            if ($editorConfig !== false && is_file($editorConfig) && is_readable($editorConfig)) {
-                $file = new EditorConfigFile($editorConfig);
+            if ($editorConfigFile !== false && is_file($editorConfigFile) && is_readable($editorConfigFile)) {
+                $file = $this->getConfigFile($editorConfigFile);
+
                 $files[] = $file;
+
                 if ($file->isRoot() === true) {
-                    $stop = true;
+                    break;
                 }
             }
 
             $parent = dirname($path);
 
             if ($parent === $path) {
-                $stop = true;
+                break;
             }
 
             $path = $parent;
         }
 
         return $files;
+    }
+
+    private function getConfigFile(string $path) : EditorConfigFile
+    {
+        return $this->configFiles[$path] ?? $this->configFiles[$path] = new EditorConfigFile($path);
     }
 }
