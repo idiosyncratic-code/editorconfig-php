@@ -31,7 +31,7 @@ final class EditorConfigFile
     /** @var array<int, Section> */
     private $sections = [];
 
-    /** @var declarationRegistry */
+    /** @var DeclarationRegistry */
     private $declarationRegistry;
 
     public function __construct(string $path)

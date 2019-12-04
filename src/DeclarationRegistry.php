@@ -28,7 +28,7 @@ final class DeclarationRegistry
         $method = sprintf('get%s', ucwords(str_replace(['-', '_'], '', $name)));
 
         if (method_exists($this, $method) === true) {
-            return call_user_func_array([$this, $method], [$value]);
+            return $this->$method($value);
         }
 
         return new GenericDeclaration($name, $value);

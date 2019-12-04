@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Idiosyncratic\EditorConfig\Declaration;
 
+use function strtolower;
+
 class UnsetDeclaration extends Declaration
 {
+    /** @var string */
     private $name;
 
     public function __construct(string $name)

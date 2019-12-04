@@ -8,6 +8,7 @@ use const DIRECTORY_SEPARATOR;
 use function array_merge;
 use function array_pop;
 use function dirname;
+use function implode;
 use function is_file;
 use function is_readable;
 use function realpath;
@@ -37,9 +38,11 @@ final class EditorConfig
         }
 
         foreach ($configuration as $key => $declaration) {
-            if ($declaration->getValue() === null) {
-                unset($configuration[$key]);
+            if ($declaration->getValue() !== null) {
+                continue;
             }
+
+            unset($configuration[$key]);
         }
 
         return $configuration;

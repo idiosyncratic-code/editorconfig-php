@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Idiosyncratic\EditorConfig\Declaration;
 
+use function is_bool;
+use function strtolower;
+
 class GenericDeclaration extends Declaration
 {
     /** @var string */
@@ -12,6 +15,9 @@ class GenericDeclaration extends Declaration
     /** @var mixed */
     private $value;
 
+    /**
+     * @param mixed $value
+     */
     public function __construct(string $name, $value)
     {
         $this->name = strtolower($name);

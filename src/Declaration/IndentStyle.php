@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Idiosyncratic\EditorConfig\Declaration;
 
 use DomainException;
+use function in_array;
+use function sprintf;
 
 class IndentStyle extends Declaration
 {
+    /** @var string */
     private $value;
 
     public function __construct(string $value)

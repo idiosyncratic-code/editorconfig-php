@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Idiosyncratic\EditorConfig\Declaration;
 
+use function sprintf;
+
 abstract class Declaration
 {
     abstract public function getName() : string;

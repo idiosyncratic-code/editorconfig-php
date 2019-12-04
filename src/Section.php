@@ -8,7 +8,6 @@ use ErrorException;
 use function debug_backtrace;
 use function fnmatch;
 use function sprintf;
-use function strtolower;
 
 final class Section
 {
@@ -17,6 +16,9 @@ final class Section
 
     /** @var array<string, mixed> */
     private $declarations = [];
+
+    /** @var DeclarationRegistry */
+    private $declarationRegistry;
 
     /**
      * @param array<string, mixed> $declarations
@@ -43,6 +45,9 @@ final class Section
         return fnmatch($this->glob, $path);
     }
 
+    /**
+     * @param array<string, mixed> $declarations
+     */
     private function setDeclarations(array $declarations) : void
     {
         foreach ($declarations as $name => $value) {
