@@ -21,7 +21,7 @@ use Idiosyncratic\EditorConfig\EditorConfig;
 $ec = new EditorConfig();
 
 // $config will be an array of the declarations matching for the specified path
-$config = $ec->printConfigForPath(__FILE__);
+$config = $ec->getConfigForPath(__FILE__);
 
 // Print matching configuration rules as string
 print $ec->printConfigForPath(__FILE__) . PHP_EOL;
