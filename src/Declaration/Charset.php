@@ -9,20 +9,28 @@ use function in_array;
 use function is_string;
 use function sprintf;
 
-final class IndentStyle extends Declaration
+final class Charset extends Declaration
 {
-    public function getName() : string
-    {
-        return 'indent_style';
-    }
+    public const CHARSETS = [
+        'latin1',
+        'utf-8',
+        'utf-8-bom',
+        'utf-16be',
+        'utf-16le',
+    ];
 
     /**
      * @inheritdoc
      */
     public function validateValue($value) : void
     {
-        if (is_string($value) === false || in_array($value, ['tab', 'space']) === false) {
+        if (is_string($value) === false || in_array($value, self::CHARSETS) === false) {
             throw new DomainException(sprintf('%s is not a valid value for \'%s\'', $value, $this->getName()));
         }
+    }
+
+    public function getName() : string
+    {
+        return 'charset';
     }
 }

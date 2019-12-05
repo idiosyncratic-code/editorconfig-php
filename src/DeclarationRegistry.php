@@ -4,11 +4,17 @@ declare(strict_types=1);
 
 namespace Idiosyncratic\EditorConfig;
 
+use Idiosyncratic\EditorConfig\Declaration\Charset;
 use Idiosyncratic\EditorConfig\Declaration\Declaration;
+use Idiosyncratic\EditorConfig\Declaration\EndOfLine;
 use Idiosyncratic\EditorConfig\Declaration\GenericDeclaration;
+use Idiosyncratic\EditorConfig\Declaration\IndentSize;
 use Idiosyncratic\EditorConfig\Declaration\IndentStyle;
+use Idiosyncratic\EditorConfig\Declaration\InsertFinalNewline;
+use Idiosyncratic\EditorConfig\Declaration\MaxLineLength;
+use Idiosyncratic\EditorConfig\Declaration\TabWidth;
+use Idiosyncratic\EditorConfig\Declaration\TrimTrailingWhitespace;
 use Idiosyncratic\EditorConfig\Declaration\UnsetDeclaration;
-use function call_user_func_array;
 use function method_exists;
 use function sprintf;
 use function str_replace;
@@ -40,5 +46,61 @@ final class DeclarationRegistry
     public function getIndentStyle($value) : IndentStyle
     {
         return new IndentStyle($value);
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function getCharset($value) : Charset
+    {
+        return new Charset($value);
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function getEndOfLine($value) : EndOfLine
+    {
+        return new EndOfLine($value);
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function getInsertFinalNewline($value) : InsertFinalNewline
+    {
+        return new InsertFinalNewline($value);
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function getTrimTrailingWhitespace($value) : TrimTrailingWhitespace
+    {
+        return new TrimTrailingWhitespace($value);
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function getIndentSize($value) : IndentSize
+    {
+        return new IndentSize($value);
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function getTabWidth($value) : TabWidth
+    {
+        return new TabWidth($value);
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function getMaxLineLength($value) : MaxLineLength
+    {
+        return new MaxLineLength($value);
     }
 }

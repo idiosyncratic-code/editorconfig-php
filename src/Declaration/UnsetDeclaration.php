@@ -4,29 +4,13 @@ declare(strict_types=1);
 
 namespace Idiosyncratic\EditorConfig\Declaration;
 
-use function strtolower;
-
-class UnsetDeclaration extends Declaration
+final class UnsetDeclaration extends Declaration
 {
-    /** @var string */
-    private $name;
-
     public function __construct(string $name)
     {
-        $this->name = strtolower($name);
-    }
+        $this->setName($name);
 
-    public function getName() : string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getValue()
-    {
-        return null;
+        parent::__construct(null);
     }
 
     public function getStringValue() : string
