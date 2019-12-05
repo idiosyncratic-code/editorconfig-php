@@ -9,6 +9,7 @@ use const INI_SCANNER_TYPED;
 use function array_merge;
 use function dirname;
 use function file_get_contents;
+use function implode;
 use function is_array;
 use function is_file;
 use function is_readable;
@@ -23,7 +24,7 @@ final class EditorConfigFile
     private $path;
 
     /** @var string */
-    private $fileContent;
+    private $fileContent = '';
 
     /** @var bool */
     private $isRoot;
@@ -38,15 +39,30 @@ final class EditorConfigFile
     {
         $this->declarationRegistry = new DeclarationRegistry();
 
-        if (is_file($path) === false) {
-            throw new RuntimeException(sprintf('File %s does not exist', $path));
+        if (is_file($path) === false || is_readable($path) === false) {
+            throw new RuntimeException(sprintf('File %s does not exist or is not readable', $path));
         }
 
-        if (is_readable($path) === false) {
-            throw new RuntimeException(sprintf('File %s is not readable', $path));
+        $content = file_get_contents($path);
+
+        $content = $content ? $content : '';
+
+        $this->path = $path;
+
+        $this->parse($content);
+    }
+
+    public function __toString() : string
+    {
+        $preamble = $this->isRoot() === true ? "root=true\n" : '';
+
+        $sections = [];
+
+        foreach ($this->sections as $section) {
+            $sections[] = (string) $section;
         }
 
-        $this->parse($path);
+        return sprintf('%s%s', $preamble, implode("\n", $sections));
     }
 
     public function isRoot() : bool
@@ -77,27 +93,13 @@ final class EditorConfigFile
         return $configuration;
     }
 
-    private function parse(string $path) : void
+    private function parse(string $content) : void
     {
-        $this->path = $path;
-
-        $fileContent = file_get_contents($path);
-
-        if ($fileContent === false) {
-            $this->fileContent = '';
-
-            return;
-        }
-
-        $this->fileContent = $fileContent;
+        $this->fileContent = $content;
 
         $content =  preg_replace('/^\s/m', '', $this->fileContent) ?? $this->fileContent;
 
-        $parsedContent = parse_ini_string($content, true, INI_SCANNER_TYPED);
-
-        if ($parsedContent === false) {
-            return;
-        }
+        $parsedContent = $this->parseIniString($content);
 
         $this->isRoot = $parsedContent['root'] ?? false;
 
@@ -106,13 +108,27 @@ final class EditorConfigFile
                 continue;
             }
 
-            $globPrefix = strpos($glob, '/') === 0 ? dirname($this->path) : '**/';
-
             $this->sections[] = new Section(
-                sprintf('%s%s', $globPrefix, $glob),
+                $this->getGlobPrefix($glob),
+                $glob,
                 $declarations,
                 $this->declarationRegistry
             );
         }
+    }
+
+    private function getGlobPrefix(string $glob) : string
+    {
+        return strpos($glob, '/') === 0 ? dirname($this->path) : '**/';
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function parseIniString(string $content) : array
+    {
+        $parsedContent = parse_ini_string($content, true, INI_SCANNER_TYPED);
+
+        return is_array($parsedContent) === true ? $parsedContent : [];
     }
 }

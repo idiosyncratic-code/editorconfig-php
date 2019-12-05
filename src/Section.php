@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace Idiosyncratic\EditorConfig;
 
 use ErrorException;
+use function array_key_exists;
 use function debug_backtrace;
 use function fnmatch;
+use function implode;
 use function sprintf;
 
 final class Section
 {
+    /** @var string */
+    private $globPrefix;
+
     /** @var string */
     private $glob;
 
@@ -23,13 +28,28 @@ final class Section
     /**
      * @param array<string, mixed> $declarations
      */
-    public function __construct(string $glob, array $declarations, DeclarationRegistry $declarationRegistry)
-    {
+    public function __construct(
+        string $globPrefix,
+        string $glob,
+        array $declarations,
+        DeclarationRegistry $declarationRegistry
+    ) {
+        $this->globPrefix = $globPrefix;
+
         $this->glob = $glob;
 
         $this->declarationRegistry = $declarationRegistry;
 
         $this->setDeclarations($declarations);
+    }
+
+    public function __toString() : string
+    {
+        return sprintf(
+            "[%s]\n%s\n",
+            $this->glob,
+            implode("\n", $this->getDeclarations())
+        );
     }
 
     /**
@@ -42,7 +62,7 @@ final class Section
 
     public function matches(string $path) : bool
     {
-        return fnmatch($this->glob, $path);
+        return fnmatch(sprintf('%s%s', $this->globPrefix, $this->glob), $path);
     }
 
     /**
@@ -82,5 +102,10 @@ final class Section
             $trace[0]['file'],
             $trace[0]['line']
         ));
+    }
+
+    public function __isset(string $property) : bool
+    {
+        return array_key_exists($property, $this->declarations);
     }
 }

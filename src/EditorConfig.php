@@ -64,7 +64,9 @@ final class EditorConfig
 
         $stop = false;
 
-        while (true) {
+        $parent = '';
+
+        while ($parent !== $path) {
             $editorConfigFile = realpath(sprintf('%s%s.editorconfig', $path, DIRECTORY_SEPARATOR));
 
             if ($editorConfigFile !== false && is_file($editorConfigFile) && is_readable($editorConfigFile)) {
@@ -77,13 +79,8 @@ final class EditorConfig
                 }
             }
 
+            $path = dirname($path);
             $parent = dirname($path);
-
-            if ($parent === $path) {
-                break;
-            }
-
-            $path = $parent;
         }
 
         return $files;
