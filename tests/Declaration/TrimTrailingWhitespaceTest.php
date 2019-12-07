@@ -12,17 +12,17 @@ class TrimTrailingWhitespaceTest extends TestCase
 {
     public function testValidValues()
     {
-        $declaration = new TrimTrailingWhitespace(false);
+        $declaration = new TrimTrailingWhitespace('false');
         $this->assertEquals('trim_trailing_whitespace=false', (string) $declaration);
 
-        $declaration = new TrimTrailingWhitespace(true);
+        $declaration = new TrimTrailingWhitespace('true');
         $this->assertEquals('trim_trailing_whitespace=true', (string) $declaration);
     }
 
     public function testInvalidIntValue()
     {
         $this->expectException(DomainException::class);
-        $declaration = new TrimTrailingWhitespace(4);
+        $declaration = new TrimTrailingWhitespace('4');
     }
 
     public function testInvalidStringValue()

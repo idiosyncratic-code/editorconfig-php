@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Idiosyncratic\EditorConfig\Declaration;
 
-use DomainException;
+use Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -21,15 +21,12 @@ class IndentStyleTest extends TestCase
         $this->assertEquals('space', $declaration->getValue());
     }
 
-    public function testInvalidValueType()
+    public function testInvalidValues()
     {
-        $this->expectException(DomainException::class);
-        $declaration = new IndentStyle(true);
-    }
+        $this->expectException(InvalidValue::class);
+        $declaration = new IndentStyle('true');
 
-    public function testInvalidValueValue()
-    {
-        $this->expectException(DomainException::class);
+        $this->expectException(InvalidValue::class);
         $declaration = new IndentStyle('spaces');
     }
 }

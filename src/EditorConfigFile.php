@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Idiosyncratic\EditorConfig;
 
 use Idiosyncratic\EditorConfig\Declaration\Factory;
+use Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use RuntimeException;
-use const INI_SCANNER_TYPED;
+use const INI_SCANNER_RAW;
 use function array_merge;
 use function dirname;
 use function file_get_contents;
 use function implode;
+use function in_array;
 use function is_array;
 use function is_file;
 use function is_readable;
@@ -28,7 +30,7 @@ final class EditorConfigFile
     private $fileContent = '';
 
     /** @var bool */
-    private $isRoot;
+    private $isRoot = false;
 
     /** @var array<int, Section> */
     private $sections = [];
@@ -102,7 +104,9 @@ final class EditorConfigFile
 
         $parsedContent = $this->parseIniString($content);
 
-        $this->isRoot = $parsedContent['root'] ?? false;
+        if (isset($parsedContent['root']) === true) {
+            $this->setIsRoot($parsedContent['root']);
+        }
 
         foreach ($parsedContent as $glob => $declarations) {
             if (is_array($declarations) === false) {
@@ -118,6 +122,15 @@ final class EditorConfigFile
         }
     }
 
+    private function setIsRoot(string $isRoot) : void
+    {
+        if (in_array($isRoot, ['true', 'false']) === false) {
+            throw new InvalidValue('root', $isRoot);
+        }
+
+        $this->isRoot = $isRoot === 'true';
+    }
+
     private function getGlobPrefix(string $glob) : string
     {
         return strpos($glob, '/') === 0 ? dirname($this->path) : '**/';
@@ -128,7 +141,7 @@ final class EditorConfigFile
      */
     private function parseIniString(string $content) : array
     {
-        $parsedContent = parse_ini_string($content, true, INI_SCANNER_TYPED);
+        $parsedContent = parse_ini_string($content, true, INI_SCANNER_RAW);
 
         return is_array($parsedContent) === true ? $parsedContent : [];
     }

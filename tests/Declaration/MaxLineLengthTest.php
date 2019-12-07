@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Idiosyncratic\EditorConfig\Declaration;
 
-use DomainException;
+use Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 class MaxLineLengthTest extends TestCase
 {
@@ -15,25 +14,20 @@ class MaxLineLengthTest extends TestCase
         $declaration = new MaxLineLength('off');
         $this->assertEquals('max_line_length=off', (string) $declaration);
 
-        $declaration = new MaxLineLength(4);
+        $declaration = new MaxLineLength('4');
         $this->assertEquals('max_line_length=4', (string) $declaration);
+        $this->assertSame(4, $declaration->getValue());
     }
 
-    public function testInvalidValueType()
+    public function testInvalidValues()
     {
-        $this->expectException(DomainException::class);
-        $declaration = new MaxLineLength(true);
-    }
+        $this->expectException(InvalidValue::class);
+        $declaration = new MaxLineLength('true');
 
-    public function testInvalidValueValue()
-    {
-        $this->expectException(DomainException::class);
+        $this->expectException(InvalidValue::class);
         $declaration = new MaxLineLength('four');
-    }
 
-    public function testInvalidNegativeIntegerValue()
-    {
-        $this->expectException(DomainException::class);
-        $declaration = new MaxLineLength(-1);
+        $this->expectException(InvalidValue::class);
+        $declaration = new MaxLineLength('-1');
     }
 }

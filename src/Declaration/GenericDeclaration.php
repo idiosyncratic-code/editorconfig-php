@@ -6,10 +6,7 @@ namespace Idiosyncratic\EditorConfig\Declaration;
 
 final class GenericDeclaration extends Declaration
 {
-    /**
-     * @param mixed $value
-     */
-    public function __construct(string $name, $value)
+    public function __construct(string $name, string $value)
     {
         $this->setName($name);
 

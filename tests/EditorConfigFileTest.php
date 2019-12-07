@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Idiosyncratic\EditorConfig;
 
+use Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -50,6 +51,16 @@ class EditorConfigFileTest extends TestCase
 
         $this->assertTrue(strpos((string) $file, 'root=true') === 0);
     }
+
+    public function testInvalidRootValue() : void
+    {
+        $path = __DIR__ . '/data/invalid_root_editorconfig';
+
+        $this->expectException(InvalidValue::class);
+
+        $file = new EditorConfigFile($path);
+    }
+
 
     public function testFileDoesNotExist() : void
     {

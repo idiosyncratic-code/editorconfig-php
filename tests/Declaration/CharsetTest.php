@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Idiosyncratic\EditorConfig\Declaration;
 
-use DomainException;
+use Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -18,15 +18,12 @@ class CharsetTest extends TestCase
         }
     }
 
-    public function testInvalidValueType()
+    public function testInvalidValue()
     {
-        $this->expectException(DomainException::class);
-        $declaration = new Charset(true);
-    }
+        $this->expectException(InvalidValue::class);
+        $declaration = new Charset('true');
 
-    public function testInvalidValueValue()
-    {
-        $this->expectException(DomainException::class);
+        $this->expectException(InvalidValue::class);
         $declaration = new Charset('spaces');
     }
 }

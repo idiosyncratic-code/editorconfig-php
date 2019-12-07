@@ -18,14 +18,11 @@ class EndOfLineTest extends TestCase
         }
     }
 
-    public function testInvalidValueType()
+    public function testInvalidValues()
     {
         $this->expectException(DomainException::class);
-        $declaration = new EndOfLine(true);
-    }
+        $declaration = new EndOfLine('true');
 
-    public function testInvalidValueValue()
-    {
         $this->expectException(DomainException::class);
         $declaration = new EndOfLine('spaces');
     }

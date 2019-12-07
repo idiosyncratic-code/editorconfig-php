@@ -16,7 +16,7 @@ class SectionTest extends TestCase
             '**/',
             '*.php',
             [
-                'indent_size' => 4,
+                'indent_size' => '4',
                 'indent_style' => 'space',
             ],
             new Factory()
@@ -33,7 +33,7 @@ class SectionTest extends TestCase
             '**/',
             '*.php',
             [
-                'indent_size' => 4,
+                'indent_size' => '4',
                 'indent_style' => 'space',
             ],
             new Factory()

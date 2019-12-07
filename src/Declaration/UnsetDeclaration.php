@@ -10,11 +10,14 @@ final class UnsetDeclaration extends Declaration
     {
         $this->setName($name);
 
-        parent::__construct(null);
+        parent::__construct('unset');
     }
 
-    public function getStringValue() : string
+    /**
+     * @return mixed
+     */
+    protected function getTypedValue(string $value)
     {
-        return 'unset';
+        return null;
     }
 }
