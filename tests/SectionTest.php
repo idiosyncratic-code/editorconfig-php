@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Idiosyncratic\EditorConfig;
 
-use PHPUnit\Framework\TestCase;
+use Idiosyncratic\EditorConfig\Declaration\Factory;
 use ErrorException;
+use PHPUnit\Framework\TestCase;
 
 class SectionTest extends TestCase
 {
@@ -18,7 +19,7 @@ class SectionTest extends TestCase
                 'indent_size' => 4,
                 'indent_style' => 'space',
             ],
-            new DeclarationRegistry()
+            new Factory()
         );
 
         $this->assertEquals('space', $section->indent_style->getValue());
@@ -35,7 +36,7 @@ class SectionTest extends TestCase
                 'indent_size' => 4,
                 'indent_style' => 'space',
             ],
-            new DeclarationRegistry()
+            new Factory()
         );
 
         $this->expectException(ErrorException::class);

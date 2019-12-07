@@ -2,25 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Idiosyncratic\EditorConfig;
+namespace Idiosyncratic\EditorConfig\Declaration;
 
-use Idiosyncratic\EditorConfig\Declaration\Charset;
-use Idiosyncratic\EditorConfig\Declaration\Declaration;
-use Idiosyncratic\EditorConfig\Declaration\EndOfLine;
-use Idiosyncratic\EditorConfig\Declaration\GenericDeclaration;
-use Idiosyncratic\EditorConfig\Declaration\IndentSize;
-use Idiosyncratic\EditorConfig\Declaration\IndentStyle;
-use Idiosyncratic\EditorConfig\Declaration\InsertFinalNewline;
-use Idiosyncratic\EditorConfig\Declaration\MaxLineLength;
-use Idiosyncratic\EditorConfig\Declaration\TabWidth;
-use Idiosyncratic\EditorConfig\Declaration\TrimTrailingWhitespace;
-use Idiosyncratic\EditorConfig\Declaration\UnsetDeclaration;
 use function method_exists;
 use function sprintf;
 use function str_replace;
 use function ucwords;
 
-final class DeclarationRegistry
+final class Factory
 {
     /**
      * @param mixed $value

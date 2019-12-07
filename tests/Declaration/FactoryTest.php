@@ -2,15 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Idiosyncratic\EditorConfig;
+namespace Idiosyncratic\EditorConfig\Declaration;
 
 use DomainException;
-use Idiosyncratic\EditorConfig\Declaration\GenericDeclaration;
-use Idiosyncratic\EditorConfig\Declaration\UnsetDeclaration;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-class DeclarationRegistryTest extends TestCase
+class FactoryTest extends TestCase
 {
     public function testOfficialDeclarations()
     {
@@ -25,28 +23,28 @@ class DeclarationRegistryTest extends TestCase
             'max_line_length' => 'off',
         ];
 
-        $registry = new DeclarationRegistry();
+        $factory = new Factory();
 
         foreach ($declarations as $key => $value) {
-            $declaration = $registry->getDeclaration($key, $value);
+            $declaration = $factory->getDeclaration($key, $value);
             $this->assertEquals($key, $declaration->getName());
         }
     }
 
     public function testUnsetDeclaration()
     {
-        $registry = new DeclarationRegistry();
+        $factory = new Factory();
 
-        $indentSize = $registry->getDeclaration('indent_size', 'unset');
+        $indentSize = $factory->getDeclaration('indent_size', 'unset');
 
         $this->assertInstanceOf(UnsetDeclaration::class, $indentSize);
     }
 
     public function testUnknownDeclaration()
     {
-        $registry = new DeclarationRegistry();
+        $factory = new Factory();
 
-        $justification = $registry->getDeclaration('justification', 'left');
+        $justification = $factory->getDeclaration('justification', 'left');
 
         $this->assertInstanceOf(GenericDeclaration::class, $justification);
     }

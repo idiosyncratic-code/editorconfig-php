@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Idiosyncratic\EditorConfig;
 
 use ErrorException;
+use Idiosyncratic\EditorConfig\Declaration\Factory;
 use function array_key_exists;
 use function debug_backtrace;
 use function fnmatch;
@@ -22,8 +23,8 @@ final class Section
     /** @var array<string, mixed> */
     private $declarations = [];
 
-    /** @var DeclarationRegistry */
-    private $declarationRegistry;
+    /** @var Factory */
+    private $declarationFactory;
 
     /**
      * @param array<string, mixed> $declarations
@@ -32,13 +33,13 @@ final class Section
         string $globPrefix,
         string $glob,
         array $declarations,
-        DeclarationRegistry $declarationRegistry
+        Factory $declarationFactory
     ) {
         $this->globPrefix = $globPrefix;
 
         $this->glob = $glob;
 
-        $this->declarationRegistry = $declarationRegistry;
+        $this->declarationFactory = $declarationFactory;
 
         $this->setDeclarations($declarations);
     }
@@ -80,7 +81,7 @@ final class Section
      */
     private function setDeclaration(string $name, $value) : void
     {
-        $declaration = $this->declarationRegistry->getDeclaration($name, $value);
+        $declaration = $this->declarationFactory->getDeclaration($name, $value);
 
         $this->declarations[$declaration->getName()] = $declaration;
     }

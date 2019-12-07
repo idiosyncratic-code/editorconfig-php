@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Idiosyncratic\EditorConfig;
 
+use Idiosyncratic\EditorConfig\Declaration\Factory;
 use RuntimeException;
 use const INI_SCANNER_TYPED;
 use function array_merge;
@@ -32,12 +33,12 @@ final class EditorConfigFile
     /** @var array<int, Section> */
     private $sections = [];
 
-    /** @var DeclarationRegistry */
-    private $declarationRegistry;
+    /** @var Factory */
+    private $declarationFactory;
 
-    public function __construct(string $path)
+    public function __construct(string $path, ?Factory $declarationFactory = null)
     {
-        $this->declarationRegistry = new DeclarationRegistry();
+        $this->declarationFactory = $declarationFactory ?? new Factory();
 
         if (is_file($path) === false || is_readable($path) === false) {
             throw new RuntimeException(sprintf('File %s does not exist or is not readable', $path));
@@ -112,7 +113,7 @@ final class EditorConfigFile
                 $this->getGlobPrefix($glob),
                 $glob,
                 $declarations,
-                $this->declarationRegistry
+                $this->declarationFactory
             );
         }
     }
