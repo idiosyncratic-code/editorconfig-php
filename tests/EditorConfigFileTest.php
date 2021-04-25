@@ -10,9 +10,9 @@ use RuntimeException;
 
 class EditorConfigFileTest extends TestCase
 {
-    public function testParseEditorConfigFile() : void
+    public function testParseEditorConfigFile(): void
     {
-        $path = __DIR__ . '/data/editorconfig';
+        $path = __DIR__.'/data/editorconfig';
 
         $file = new EditorConfigFile($path);
 
@@ -23,38 +23,38 @@ class EditorConfigFileTest extends TestCase
         $this->assertEquals($path, $file->getPath());
     }
 
-    public function testGetPath() : void
+    public function testGetPath(): void
     {
-        $path = __DIR__ . '/data/editorconfig';
+        $path = __DIR__.'/data/editorconfig';
 
         $file = new EditorConfigFile($path);
 
         $this->assertEquals($path, $file->getPath());
     }
 
-    public function testEmptyFile() : void
+    public function testEmptyFile(): void
     {
-        $path = __DIR__ . '/data/empty_editorconfig';
+        $path = __DIR__.'/data/empty_editorconfig';
 
         $file = new EditorConfigFile($path);
 
-        $this->assertEquals('', trim((string) $file));
+        $this->assertEquals('', trim((string)$file));
     }
 
-    public function testRootFile() : void
+    public function testRootFile(): void
     {
-        $path = __DIR__ . '/data/root_editorconfig';
+        $path = __DIR__.'/data/root_editorconfig';
 
         $file = new EditorConfigFile($path);
 
         $this->assertTrue($file->isRoot());
 
-        $this->assertTrue(strpos((string) $file, 'root=true') === 0);
+        $this->assertTrue(strpos((string)$file, 'root=true') === 0);
     }
 
-    public function testInvalidRootValue() : void
+    public function testInvalidRootValue(): void
     {
-        $path = __DIR__ . '/data/invalid_root_editorconfig';
+        $path = __DIR__.'/data/invalid_root_editorconfig';
 
         $this->expectException(InvalidValue::class);
 
@@ -62,25 +62,45 @@ class EditorConfigFileTest extends TestCase
     }
 
 
-    public function testFileDoesNotExist() : void
+    public function testFileDoesNotExist(): void
     {
         $this->expectException(RuntimeException::class);
 
         $file = new EditorConfigFile(__DIR__);
     }
 
-    public function testGetConfigForPath() : void
+    public function testEmptyIndentSize(): void
     {
-        $path = __DIR__ . '/data/editorconfig';
+        $path = __DIR__.'/data/editorconfig';
 
         $file = new EditorConfigFile($path);
 
         $config = $file->getConfigForPath(__DIR__);
 
         $this->assertFalse(isset($config['indent_size']));
+    }
 
-        $config = $file->getConfigForPath(__FILE__);
+    /**
+     * @dataProvider configForPath
+     */
+    public function testGetConfigForPath(string $pathToFile, int $expectedIndentSize): void
+    {
+        $path = __DIR__.'/data/editorconfig';
 
-        $this->assertEquals(4, $config['indent_size']->getValue());
+        $file = new EditorConfigFile($path);
+
+        $config = $file->getConfigForPath($pathToFile);
+
+        $this->assertEquals($expectedIndentSize, $config['indent_size']->getValue());
+    }
+
+    public function configForPath(): array
+    {
+        return [
+            'This .php file has an indentation of 4' => [__FILE__, 4],
+            'The test.json file has an indentation of 2' => [__DIR__.'/data/test.json', 2],
+            'The test.yml has an indentation of 98' => [__DIR__.'/data/test.yml', 98],
+            'The test.js has an indentation of 27' => [__DIR__.'/data/lib/test.js', 27],
+        ];
     }
 }
