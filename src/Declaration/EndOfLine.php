@@ -6,6 +6,8 @@ namespace Idiosyncratic\EditorConfig\Declaration;
 
 use Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use function in_array;
+use function is_string;
+use function strtolower;
 
 final class EndOfLine extends Declaration
 {
@@ -20,7 +22,7 @@ final class EndOfLine extends Declaration
      */
     public function validateValue($value) : void
     {
-        if (in_array($value, self::LINE_ENDINGS) === false) {
+        if (is_string($value) === false || in_array(strtolower($value), self::LINE_ENDINGS) === false) {
             throw new InvalidValue(
                 $this->getStringValue(),
                 $this->getName()

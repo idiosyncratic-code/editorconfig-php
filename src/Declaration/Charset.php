@@ -7,6 +7,7 @@ namespace Idiosyncratic\EditorConfig\Declaration;
 use Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use function in_array;
 use function is_string;
+use function strtolower;
 
 final class Charset extends Declaration
 {
@@ -23,7 +24,7 @@ final class Charset extends Declaration
      */
     public function validateValue($value) : void
     {
-        if (is_string($value) === false || in_array($value, self::CHARSETS) === false) {
+        if (is_string($value) === false || in_array(strtolower($value), self::CHARSETS) === false) {
             throw new InvalidValue(
                 $this->getStringValue(),
                 $this->getName()
