@@ -46,9 +46,7 @@ final class EditorConfigFile
             throw new RuntimeException(sprintf('File %s does not exist or is not readable', $path));
         }
 
-        $content = file_get_contents($path);
-
-        $content = $content ? $content : '';
+        $content = $this->cleanContent($path);
 
         $this->path = $path;
 
@@ -144,5 +142,12 @@ final class EditorConfigFile
         $parsedContent = parse_ini_string($content, true, INI_SCANNER_RAW);
 
         return is_array($parsedContent) === true ? $parsedContent : [];
+    }
+
+    private function cleanContent(string $path) : string
+    {
+        $content = file_get_contents($path);
+
+        return preg_replace('/#.*$/m', '', $content) ?? $content;
     }
 }
