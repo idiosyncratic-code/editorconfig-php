@@ -7,6 +7,7 @@ namespace Idiosyncratic\EditorConfig\Declaration;
 use Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use function in_array;
 use function is_string;
+use function strtolower;
 
 final class IndentStyle extends Declaration
 {
@@ -20,7 +21,7 @@ final class IndentStyle extends Declaration
      */
     public function validateValue($value) : void
     {
-        if (is_string($value) === false || in_array($value, ['tab', 'space']) === false) {
+        if (is_string($value) === false || in_array(strtolower($value), ['tab', 'space']) === false) {
             throw new InvalidValue(
                 $this->getStringValue(),
                 $this->getName()
