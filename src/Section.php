@@ -6,10 +6,14 @@ namespace Idiosyncratic\EditorConfig;
 
 use ErrorException;
 use Idiosyncratic\EditorConfig\Declaration\Factory;
+use const PREG_SET_ORDER;
 use function array_key_exists;
 use function debug_backtrace;
+use function explode;
 use function fnmatch;
 use function implode;
+use function preg_match;
+use function preg_match_all;
 use function sprintf;
 
 final class Section
@@ -63,7 +67,13 @@ final class Section
 
     public function matches(string $path) : bool
     {
-        return fnmatch(sprintf('%s%s', $this->globPrefix, $this->glob), $path);
+        if (preg_match('#{(.*)}#', $this->glob) === 1) {
+            return $this->matchesWithCurlBracesExpansion($path);
+        }
+
+        $pattern = sprintf('%s%s', $this->globPrefix, $this->glob);
+
+        return fnmatch($pattern, $path);
     }
 
     /**
@@ -108,5 +118,27 @@ final class Section
     public function __isset(string $property) : bool
     {
         return array_key_exists($property, $this->declarations);
+    }
+
+    private function matchesWithCurlBracesExpansion(string $path) : bool
+    {
+        preg_match_all('#(?<prefix>.*){(?<subpattern>.*)}#', $this->glob, $matches, PREG_SET_ORDER);
+
+        foreach ($matches as $match) {
+            if (array_key_exists('subpattern', $match) === false) {
+                continue;
+            }
+
+            $subPatterns = explode(',', $match['subpattern']);
+            foreach ($subPatterns as $subPattern) {
+                $pattern = sprintf('%s%s', $this->globPrefix, $match['prefix'] . $subPattern);
+
+                if (fnmatch($pattern, $path)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
