@@ -24,7 +24,9 @@ final class EditorConfig
 
     public function __construct($rootPath = null)
     {
-        $this->rootPath = $rootPath;
+        if ($rootPath) {
+            $this->rootPath = realpath($rootPath);
+        }
     }
 
     /**
