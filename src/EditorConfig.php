@@ -19,6 +19,14 @@ final class EditorConfig
     /** @var array<string, EditorConfigFile> */
     private $configFiles = [];
 
+    /** @var string|null  */
+    private $rootPath;
+
+    public function __construct($rootPath = null)
+    {
+        $this->rootPath = $rootPath;
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -71,8 +79,9 @@ final class EditorConfig
 
             if ($editorConfigFile !== false && is_file($editorConfigFile) && is_readable($editorConfigFile)) {
                 $file = $this->getConfigFile($editorConfigFile);
-
-                $files[] = $file;
+                if (empty($this->rootPath) || !$file->isRoot() || dirname($file->getPath()) === $this->rootPath) {
+                    $files[] = $file;
+                }
 
                 if ($file->isRoot() === true) {
                     break;
