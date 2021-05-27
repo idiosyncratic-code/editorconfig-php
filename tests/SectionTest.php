@@ -27,6 +27,21 @@ class SectionTest extends TestCase
         $this->assertFalse(isset($section->tab_width));
     }
 
+    public function testMatchingWindowsPath() : void
+    {
+        $section = new Section(
+            '**/',
+            '*.php',
+            [
+                'indent_size' => '4',
+                'indent_style' => 'space',
+            ],
+            new Factory()
+        );
+
+        $this->assertTrue($section->matches('my\\composer.php'));
+    }
+
     public function testGetMissingDeclaration() : void
     {
         $section = new Section(
