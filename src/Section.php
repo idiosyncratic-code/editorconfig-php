@@ -67,6 +67,10 @@ final class Section
 
     public function matches(string $path) : bool
     {
+        // normalize path to unix-style directory separator,
+        // because the glob pattern assumes linux-style directory separators
+        $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
+        
         if (preg_match('#{(.*)}#', $this->glob) === 1) {
             return $this->matchesWithCurlBracesExpansion($path);
         }
