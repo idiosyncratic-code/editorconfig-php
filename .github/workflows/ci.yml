@@ -23,7 +23,7 @@ jobs:
       uses: php-actions/phpstan@v2
       with:
         php_version: 7.3
-        path: src/
+        configuration: phpstan.neon.dist
 
   phpunit:
     runs-on: ubuntu-latest
