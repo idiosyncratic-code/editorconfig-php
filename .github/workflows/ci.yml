@@ -24,3 +24,11 @@ jobs:
       with:
         php_version: 7.3
         path: src/
+
+    - name: Run PHPUnit tests
+      uses: php-actions/phpunit@v2
+      with:
+        version: 9.5
+        php_version: 7.3
+        configuration: phpunit.xml.dist
+
