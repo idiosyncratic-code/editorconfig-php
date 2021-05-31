@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Idiosyncratic\EditorConfig\Declaration;
 
 use Idiosyncratic\EditorConfig\Exception\InvalidValue;
+
 use function in_array;
 use function is_string;
 use function strtolower;

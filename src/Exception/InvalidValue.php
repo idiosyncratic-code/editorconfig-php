@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Idiosyncratic\EditorConfig\Exception;
 
 use DomainException;
+
 use function sprintf;
 
 class InvalidValue extends DomainException
