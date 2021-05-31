@@ -36,7 +36,9 @@ jobs:
         php_version: 7.3
 
     - name: PHPCS check
-      run: bin/phpcs
+      run: |
+        php --version
+        bin/phpcs
 
     - name: Run PHPUnit tests
       uses: php-actions/phpunit@v2
