@@ -2,18 +2,25 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches:
+    - main
   pull_request:
-    branches: [ main ]
+    branches:
+    - main
 
 jobs:
   phpstan:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: php-actions/composer@v5
 
-      - name: PHPStan Static Analysis
-        uses: php-actions/phpstan@v2
-        with:
-          path: src/
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: php-actions/composer@v5
+      with:
+        php_version: 7.3
+
+    - name: PHPStan Static Analysis
+      uses: php-actions/phpstan@v2
+      with:
+        php_version: 7.3
+        path: src/
