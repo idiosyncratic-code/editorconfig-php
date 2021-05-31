@@ -36,6 +36,7 @@ jobs:
         php_version: 7.3
 
     - name: PHPCS check
+      using: "composite"
       run: |
         php --version
         bin/phpcs
