@@ -62,7 +62,10 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-php-
 
-    - name: PHPCS check
+    - name: Install composer packages
       run: |
-        composer install
+        composer install --prefer-dist --no-progress
+
+    - name: Run phpcs
+      run: |
         bin/phpcs
