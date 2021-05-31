@@ -2,18 +2,70 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches:
+    - main
   pull_request:
-    branches: [ main ]
+    branches:
+    - main
 
 jobs:
   phpstan:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: php-actions/composer@v5
 
-      - name: PHPStan Static Analysis
-        uses: php-actions/phpstan@v2
-        with:
-          path: src/
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: php-actions/composer@v5
+      with:
+        php_version: 7.3
+
+    - name: PHPStan Static Analysis
+      uses: php-actions/phpstan@v2
+      with:
+        php_version: 7.3
+        configuration: phpstan.neon.dist
+
+  phpunit:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: php-actions/composer@v5
+      with:
+        php_version: 7.3
+
+    - name: Run PHPUnit tests
+      uses: php-actions/phpunit@v2
+      with:
+        version: 9.5
+        php_version: 7.3
+        configuration: phpunit.xml.dist
+
+  phpcs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup PHP Action
+      uses: shivammathur/setup-php@2.11.0
+      with:
+        php-version: '7.3'
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v2
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    - name: Install composer packages
+      run: |
+        composer install --prefer-dist --no-progress
+
+    - name: Run phpcs
+      run: |
+        bin/phpcs
