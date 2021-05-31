@@ -25,10 +25,22 @@ jobs:
         php_version: 7.3
         path: src/
 
+  phpunit:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: php-actions/composer@v5
+      with:
+        php_version: 7.3
+
+    - name: PHPCS check
+      run: phpcs
+
     - name: Run PHPUnit tests
       uses: php-actions/phpunit@v2
       with:
         version: 9.5
         php_version: 7.3
         configuration: phpunit.xml.dist
-
