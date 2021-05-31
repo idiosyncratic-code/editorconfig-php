@@ -7,7 +7,7 @@ namespace Idiosyncratic\EditorConfig;
 use Idiosyncratic\EditorConfig\Declaration\Factory;
 use Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use RuntimeException;
-use const INI_SCANNER_RAW;
+
 use function array_merge;
 use function dirname;
 use function file_get_contents;
@@ -20,6 +20,8 @@ use function parse_ini_string;
 use function preg_replace;
 use function sprintf;
 use function strpos;
+
+use const INI_SCANNER_RAW;
 
 final class EditorConfigFile
 {
@@ -147,6 +149,10 @@ final class EditorConfigFile
     private function cleanContent(string $path) : string
     {
         $content = file_get_contents($path);
+
+        if ($content === false) {
+            return '';
+        }
 
         return preg_replace('/#.*$/m', '', $content) ?? $content;
     }

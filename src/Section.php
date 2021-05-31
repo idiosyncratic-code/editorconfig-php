@@ -6,7 +6,7 @@ namespace Idiosyncratic\EditorConfig;
 
 use ErrorException;
 use Idiosyncratic\EditorConfig\Declaration\Factory;
-use const PREG_SET_ORDER;
+
 use function array_key_exists;
 use function debug_backtrace;
 use function explode;
@@ -15,6 +15,8 @@ use function implode;
 use function preg_match;
 use function preg_match_all;
 use function sprintf;
+
+use const PREG_SET_ORDER;
 
 final class Section
 {
