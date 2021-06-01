@@ -19,7 +19,6 @@ use function str_replace;
 
 use const PREG_SET_ORDER;
 
-
 final class Section
 {
     /** @var string */
