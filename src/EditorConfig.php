@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Idiosyncratic\EditorConfig;
 
-use const DIRECTORY_SEPARATOR;
 use function array_merge;
 use function array_pop;
 use function dirname;
@@ -13,6 +12,8 @@ use function is_file;
 use function is_readable;
 use function realpath;
 use function sprintf;
+
+use const DIRECTORY_SEPARATOR;
 
 final class EditorConfig
 {
