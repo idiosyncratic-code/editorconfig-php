@@ -73,7 +73,7 @@ final class Section
     {
         // normalize path to unix-style directory separator,
         // because the glob pattern assumes linux-style directory separators
-        $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
+        $path = str_replace('\\', '/', $path);
 
         if (preg_match('#{(.*)}#', $this->glob) === 1) {
             return $this->matchesWithCurlBracesExpansion($path);
