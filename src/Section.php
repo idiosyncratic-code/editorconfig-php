@@ -15,8 +15,10 @@ use function implode;
 use function preg_match;
 use function preg_match_all;
 use function sprintf;
+use function str_replace;
 
 use const PREG_SET_ORDER;
+
 
 final class Section
 {
@@ -72,7 +74,7 @@ final class Section
         // normalize path to unix-style directory separator,
         // because the glob pattern assumes linux-style directory separators
         $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
-        
+
         if (preg_match('#{(.*)}#', $this->glob) === 1) {
             return $this->matchesWithCurlBracesExpansion($path);
         }
